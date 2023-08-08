@@ -1,5 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
-
+import Card from "./components/card";
+import "./App.css";
+import fetchData from "./functions/fetchData";
 const App = () => {
   const targetRef = useRef(null);
   const [data, setData] = useState([]);
@@ -16,11 +18,9 @@ const App = () => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           count = count + 1;
-          fetch(
-            `https://api.theinnerhour.com/v1/customers/resources/articles/list?page=${count}&limit=15`
-          )
-            .then((res) => res.json())
-            .then((resData) => setData((prev) => [...prev, ...resData.data]));
+          fetchData(count).then((newData) =>
+            setData((prev) => [...prev, ...newData])
+          );
         }
       });
     };
@@ -36,16 +36,21 @@ const App = () => {
       }
     };
   }, []);
-console.log(data)
   return (
-    <div>
-      {data.map((item, index) => {
-        return <div key={item.id}>
-          <h1>{item.title}</h1>
-        </div>;
-      })}
-      <div ref={targetRef}></div>
-    </div>
+    <>
+      <div className="grid-container">
+        {data.map(({ id, title, short_description, thumb }) => (
+          <div key={id}>
+            <Card
+              title={title}
+              description={short_description}
+              imageUrl={thumb}
+            />
+          </div>
+        ))}
+      </div>
+      <div ref={targetRef} style={{ height: "20px" }}></div>
+    </>
   );
 };
 
