@@ -14,15 +14,13 @@ const App = () => {
     };
     let count = 0;
 
-    const callback = (entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          count = count + 1;
-          fetchData(count).then((newData) =>
-            setData((prev) => [...prev, ...newData])
-          );
-        }
-      });
+    const callback = ([entry]) => {
+      if (entry.isIntersecting) {
+        count = count + 1;
+        fetchData(count).then((newData) =>
+          setData((prev) => [...prev, ...newData])
+        );
+      }
     };
 
     const observer = new IntersectionObserver(callback, options);
