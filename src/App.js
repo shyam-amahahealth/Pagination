@@ -12,13 +12,13 @@ const App = () => {
       rootMargin: "0px",
       threshold: 0.1,
     };
-    let count = 0;
+    let pageCount = 0;
 
     const callback = ([entry]) => {
-      if (entry.isIntersecting) {
-        count = count + 1;
-        fetchData(count).then((newData) =>
-          setData((prev) => [...prev, ...newData])
+      if (entry.isIntersecting && pageCount <= 37) {
+        pageCount = pageCount + 1;
+        fetchData(pageCount).then((newData) =>
+          setData((prevData) => [...prevData, ...newData])
         );
       }
     };
